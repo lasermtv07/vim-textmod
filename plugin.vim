@@ -85,30 +85,16 @@ function! Text2Bf(s)
 				let c.="."
 			endif
 		else
-			let nd=-d
-			let ndt=ClosestIntegerMultiples(-d)
-			if second
-				let c.="<"
-				let second=v:false
+			"echo d
+			if second==v:false
+				let c.=">"
+				let second=v:true
 			endif
-			for j in range(1,ndt[1])
-				let c.="+"
-			endfor
-			let c.="[>"
-			for j in range(1,ndt[0])
-				let c.="-"
-			endfor
-			let c.="<-]>"
-			let acc=ndt[0]*ndt[1]
-			echo acc
-			echo v
 			while acc>v
-				echo "t"
 				let c.="-"
 				let acc-=1
 			endwhile
 			let c.="."
-			let second=v:true
 		endif
 	endfor
 	return c
