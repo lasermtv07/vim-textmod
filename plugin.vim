@@ -1,7 +1,9 @@
 function! SubstrFromBuffer(start,end)
-	let start+=1
-	if end!=0
-		let end-=1
+	let start=a:start
+	let end=a:end
+	let start[0]+=1
+	if end[0]!=0
+		let end[0]-=1
 	endif
 	let o=""
 	for i in range(start[1],end[1])
@@ -39,11 +41,15 @@ function! ClosestIntegerMultiples(i)
 	return [a,b]
 endfunction
 
-"(x,y) because if you switch the coordinates you shouldnt be ever considered sane
-let start=[getpos("'<")[2],getpos("'<")[1]]
-let end=[getpos("'>")[2],getpos("'>")[1]]
+function! StartEndCursPos()
+	"(x,y) because if you switch the coordinates you shouldnt be ever considered sane
+	let start=[getpos("'<")[2],getpos("'<")[1]]
+	let end=[getpos("'>")[2],getpos("'>")[1]]
+	return [start,end]
+	endfunction
 
 "echo SubstrFromBuffer(start,end)
+
 function! Text2Bf(s)
 	let acc=0
 	let s=a:s
@@ -60,7 +66,6 @@ function! Text2Bf(s)
 					let c.="<"
 					let second=v:false
 				endif
-				echo dt[1]
 				for j in range(1,dt[1])
 					let c.="+"
 				endfor
@@ -102,7 +107,6 @@ function! Text2Bf(s)
 					let second=v:false
 				endif
 				let dt=ClosestIntegerMultiples(-d)
-				echo dt
 				for j in range(1,dt[1])
 					let c.="+"
 				endfor
@@ -122,5 +126,56 @@ function! Text2Bf(s)
 	endfor
 	return c
 endfunction
-"echo Text2Bf("zA")
-echo Text2Bf("haii world :3 nyaa")
+
+"echo Text2Bf("haii world :3 nyaa")
+
+function! UwuifyText(t)
+	let t=a:t
+	let n=""
+	for i in range(0,len(t)-1)
+		if t[i]=="l" || t[i]=="r"
+			let n.="w"
+		elseif t[i]=="L" || t[i]=="R"
+			let n.="W"
+		else
+			let n.=t[i]
+		endif
+	endfor
+	let t=""
+	for i in split(n," ")
+		"da randomnezz
+		let m=rand()
+		let m=m/(pow(10,len(m)-2))-20
+		if m<2
+			let t.=" *blushes* "
+		elseif m<5
+			let t.=" nyaa "
+		elseif m<7
+			let t.=" uwu "
+		elseif m<10
+			let t.=" :3 "
+		elseif m<11
+			let t.=" ^^ "
+		else
+			let t.=" "
+		endif
+		let t.=i
+	endfor
+	return t
+endfunction
+
+function! PrintBfText()
+	let c=StartEndCursPos()
+	let t=SubstrFromBuffer(c[0],c[1])
+	echo ""
+	echo Text2Bf(t)
+endfunction
+function! PrintUwuifiedText()
+	let c=StartEndCursPos()
+	let t=SubstrFromBuffer(c[0],c[1])
+	echo ""
+	echo UwuifyText(t)
+endfunction
+
+command! PrintUwuified :call PrintUwuifiedText()
+command! PrintBrainfuck :call PrintBfText()
