@@ -85,19 +85,42 @@ function! Text2Bf(s)
 				let c.="."
 			endif
 		else
-			"echo d
-			if second==v:false
-				let c.=">"
+			if -d<11
+				if second==v:false
+					let c.=">"
+					let second=v:true
+				endif
+				while acc>v
+					let c.="-"
+					let acc-=1
+				endwhile
+				let c.="."
+				let acc=v
+			else
+				if second
+					let c.="<"
+					let second=v:false
+				endif
+				let dt=ClosestIntegerMultiples(-d)
+				echo dt
+				for j in range(1,dt[1])
+					let c.="+"
+				endfor
+				let c.="[>"
+				for j in range(1,dt[0])
+					let c.="-"
+				endfor
+				let c.="<-]>"
 				let second=v:true
+				for j in range(1,-d-(dt[0]*dt[1]))
+					let c.="-"
+				endfor
+				let c.="."
+				let acc=v
 			endif
-			while acc>v
-				let c.="-"
-				let acc-=1
-			endwhile
-			let c.="."
 		endif
 	endfor
 	return c
 endfunction
-
+"echo Text2Bf("zA")
 echo Text2Bf("haii world :3 nyaa")
