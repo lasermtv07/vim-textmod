@@ -40,7 +40,18 @@ function! ClosestIntegerMultiples(i)
 	let a-=1
 	return [a,b]
 endfunction
-
+"weeee
+function! ClosestSquare(n)
+	let n=a:n
+	let b=1
+	while pow(b,2)<n
+		let b+=1
+	endwhile
+	if abs(n-pow(b-1,2))<abs(n-pow(b,2))
+		let b-=1
+	endif
+	return b
+endfunction
 function! StartEndCursPos()
 	"(x,y) because if you switch the coordinates you shouldnt be ever considered sane
 	let start=[getpos("'<")[2],getpos("'<")[1]]
@@ -164,18 +175,62 @@ function! UwuifyText(t)
 	return t
 endfunction
 
+function! Text2Deadfish(t)
+	let t=a:t
+	let c=""
+	let acc=0
+	"first character
+	let m=ClosestSquare(char2nr(t[0]))
+	for i in range(1,m)
+		let c.="i"
+	endfor
+	let c.="s"
+	let acc=pow(m,2)
+	while acc>char2nr(t[0])
+		let c.="d"
+		let acc-=1
+	endwhile
+	while acc<char2nr(t[0])
+		let c.="i"
+		let acc+=1
+	endwhile
+	let c.="o"
+	"other characters
+	for i in range(1,len(t)-1)
+		let acc=str2nr(string(acc))
+		let v=char2nr(t[i])
+		"a simple optimalizrtion, basically handles using 's' without modulo
+		if (acc*acc)<=v
+			let c.="s"
+			let acc*=acc
+		endif
+		while acc>v
+			let c.="d"
+			let acc-=1
+		endwhile
+		while acc<v
+			let c.="i"
+			let acc+=1
+		endwhile
+		let c.="o"
+	endfor
+	return c
+endfunction
+
 function! PrintBfText()
 	let c=StartEndCursPos()
 	let t=SubstrFromBuffer(c[0],c[1])
-	echo ""
+	echo " "
 	echo Text2Bf(t)
 endfunction
 function! PrintUwuifiedText()
 	let c=StartEndCursPos()
 	let t=SubstrFromBuffer(c[0],c[1])
-	echo ""
+	echo " "
 	echo UwuifyText(t)
 endfunction
 
 command! PrintUwuified :call PrintUwuifiedText()
 command! PrintBrainfuck :call PrintBfText()
+
+
