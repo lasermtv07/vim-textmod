@@ -41,45 +41,6 @@ function! ClosestIntegerMultiples(i)
 	return [a,b]
 endfunction
 
-"mkaes text harder to read
-function! Obfuscate(w)
-	let w=a:w
-	let n=""
-	for j in range(0,len(w)-1)
-		let t=w[j]
-		"generated for the purpose of randomization
-		let r=rand()
-		let r=r/pow(10,len(r))
-		"swapping e's
-		if t=="e" && j!=len(w)-1
-			let n.=w[j+1]
-			let n.="e"
-			let j+=1
-		elseif t=="s"
-			"randomly swapping zs
-			if r>=0.40
-				let n.="z"
-			else
-				let n.="s"
-			endif
-		"doubling o's
-		elseif t=="o" && j!=len(w)-1 && r>0.3
-			let n.="oo"
-			let j+=1
-		else
-			let n.=t
-		endif
-	endfor
-	return n
-endfunction
-
-"guarantees misclick
-function! GuarateedMisclick(w)
-	let w=a:w
-	let r=rand() % (len(w)-1)
-	let t=w[:r-1].w[r+1].w[r].w[(r+1):]
-	return t
-endfunction
 "weeee
 function! StartEndCursPos()
 	"(x,y) because if you switch the coordinates you shouldnt be ever considered sane
@@ -244,5 +205,38 @@ endfunction
 
 command! PrintUwuified :call PrintUwuifiedText()
 command! PrintBrainfuck :call PrintBfText()
-
+function! Obfuscate(w)
+	let w=a:w
+	let n=""
+	for j in range(0,len(w)-1)
+		let t=w[j]
+		"generated for the purpose of randomization
+		let r=rand()
+		let r=r/pow(10,len(r))
+		"swapping e's
+		if t=="e" && j!=len(w)-1
+			let n.=w[j+1]
+			let n.="e"
+			let j+=1
+		elseif t=="s"
+			"randomly swapping zs
+			if r>=0.40
+				let n.="z"
+			else
+				let n.="s"
+			endif
+		"doubling o's
+		elseif t=="o" && j!=len(w)-1 && r>0.3
+			let n.="oo"
+			let j+=1
+		else
+			let n.=t
+		endif
+	endfor
+	return n
+endfunction
+w="immutable"
+let r=rand() % (len(w)-1)
+let t=w[:r-1].w[r+1].w[r].w[(r+1):]
+echo t
 
