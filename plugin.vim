@@ -73,13 +73,32 @@ function! Obfuscate(w)
 	return n
 endfunction
 
-"guarantees misclick
-function! GuarateedMisclick(w)
-	let w=a:w
-	let r=rand() % (len(w)-1)
-	let t=w[:r-1].w[r+1].w[r].w[(r+1):]
-	return t
+function! ToLowercase(m)
+	let m=a:m
+	let n=""
+	for i in m
+		if char2nr(i)>=65 && char2nr(i)<=90
+			let n.=nr2char(char2nr(i)+32)
+		else
+			let n.=i
+		endif
+	endfor
+	return n
 endfunction
+
+function! ToUppercase(m)
+	let m=a:m
+	let n=""
+	for i in m
+		if char2nr(i)>=97 && char2nr(i)<=122
+			let n.=nr2char(char2nr(i)-32)
+		else
+			let n.=i
+		endif
+	endfor
+	return n
+endfunction
+
 "weeee
 function! StartEndCursPos()
 	"(x,y) because if you switch the coordinates you shouldnt be ever considered sane
@@ -245,4 +264,54 @@ endfunction
 command! PrintUwuified :call PrintUwuifiedText()
 command! PrintBrainfuck :call PrintBfText()
 
+function! Lolcat(s)
+	let s=ToLowercase(a:s)
+	let s=split(s," ")
+	let n=""
+	let next=v:true
+	for i in range(0,len(s)-1)
+		if next
+			if i!=len(s)-2 && s[i]=="can" && s[i+1]=="i"
+				let n.="i can "
+				let next=v:false
+			elseif s[i]=="your"
+				let n.="ur "
+			elseif s[i]=="matter"
+				let n.="mattr "
+			elseif s[i]=="to"
+				let n.="2 "
+			elseif s[i]=="have"
+				let n.="has "
+			elseif s[i]!="a" && s[i]!="and"
+				let t=Obfuscate(s[i])
+				let n.=t." "
+			endif
+		else
+			let next=v:true
+		endif
+	endfor
+	return ToUppercase(n)
+endfunction
 
+function! Leet(n)
+	let n=a:n
+	let o=""
+	for i in n
+		if ToLowercase(i)=='a'
+			let o.='4'
+		elseif ToLowercase(i)=='o'
+			let o.='0'
+		elseif ToLowercase(i)=='e'
+			let o.='3'
+		elseif ToLowercase(i)=="l" || ToLowercase(i)=="i"
+			let o.='1'
+		elseif ToLowercase(i)=='t'
+			let o.='7'
+		elseif ToLowercase(i)=='s'
+			let o.='5'
+		else
+			let o.=i
+		endif
+	endfor
+	return o
+endfunction
